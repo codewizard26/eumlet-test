@@ -1,0 +1,42 @@
+/* Modal Container */
+.Kyc {
+  
+}
+
+.Kyc.show {
+  display: flex;
+}
+
+/* Modal Content */
+.modal-content {
+  margin: 20vh auto;
+  width: 30vw;
+  height: max-content;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+  background-color: #131313; /* Theme color */
+  color: white; /* Text color */
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Modal Button */
+.modal button {
+  margin-top: 10px;
+  color: #007bff; /* Button color */
+  background-color: white; /* Button text color */
+  border:2px solid #3479E9;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+
+
+.agree-text{
+  color: white;
+}
