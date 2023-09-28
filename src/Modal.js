@@ -46,7 +46,7 @@ const Modal = () => {
       Synaps.init({
         sessionId: sessionId,
         onFinish: () => {
-          alert("Verification finished");
+          
 
           fetch(
             `https://api.synaps.io/v4/individual/session/${sessionId}`,
@@ -69,7 +69,14 @@ const Modal = () => {
               setSessionDetails(data); // Set session details in state
 
               const redirectStatus = data?.session?.status || "UNKNOWN";
-              setRedirectUrl(`/kyc?status=${redirectStatus}`);
+              if (redirectStatus === "PENDING_VERIFICATION"){
+                alert("Verification finished");
+                setRedirectUrl(`/kyc?status=success`);
+              }
+              else{
+                setRedirectUrl(`/kyc?status=failed`)
+              }
+              
             })
             .catch((error) => {
               console.error("Error fetching session details:", error);
@@ -85,7 +92,12 @@ const Modal = () => {
     }
   }, [sessionId]);
 
+  useEffect(() =>{
+    
+  })
+
   // when redirect url is set
+
 
 
   useEffect(() => {
