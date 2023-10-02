@@ -1,53 +1,24 @@
 import { Synaps } from "@synaps-io/verify-sdk";
 import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 
-const Modal = () => {
-  const [sessionId, setSessionId] = useState(null);
-  const [sessionDetails, setSessionDetails] = useState(null);
-  const [redirectUrl, setRedirectUrl] = useState(null);
+const Modal = ({sessionId,redirectUrl,nonce}) => {
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("https://api.synaps.io/v4/session/init", {
-          method: "POST",
-          headers: {
-            "Api-Key": process.env.REACT_APP_API_KEY,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            alias: "MY_ALIAS",
-          }),
-        });
+  const [redirect_Url,setRedirect_Url ] = useState(null)
+  const session_Id = sessionId
 
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
+console.log("session id recieved in modal ", sessionId)
 
-        const data = await response.json();
-        console.log(data); // Log the response data
-
-        // Set the session ID in the state
-        setSessionId(data.session_id);
-      } catch (error) {
-        console.error("An error occurred:", error);
-        // Handle errors, e.g., show an error message to the user
-      }
-    };
-
-    fetchData(); // Call the async function when the component mounts
-  }, []);
 
   // Synapse Modal
   useEffect(() => {
-    if (sessionId) {
+    if (session_Id) {
       let init = true;
 
       Synaps.init({
         sessionId: sessionId,
         onFinish: () => {
           
-
           fetch(
             `https://api.synaps.io/v4/individual/session/${sessionId}`,
             {
@@ -58,23 +29,24 @@ const Modal = () => {
             }
           )
             .then((response) => {
-              if (!response.ok) {
-                throw new Error("Network response was not ok");
-              }
-              return response.json();
+              
+              //console.log(response.json())
+              return response.json()
+
+
             })
             .then((data) => {
-              console.log("Session Details:", data);
-              console.log("status", data.session.status);
-              setSessionDetails(data); // Set session details in state
+              console.log("response", data)
+              // setSessionDetails(data); // Set session details in state
 
               const redirectStatus = data?.session?.status || "UNKNOWN";
-              if (redirectStatus === "PENDING_VERIFICATION"){
+              if (redirectStatus === "PENDING_VERIFICATION" || redirectStatus === "VERIFIED"){
                 alert("Verification finished");
-                setRedirectUrl(`/kyc?status=success`);
+                setRedirect_Url(redirectUrl)
+
               }
               else{
-                setRedirectUrl(`/kyc?status=failed`)
+                setRedirect_Url()
               }
               
             })
@@ -90,31 +62,31 @@ const Modal = () => {
         init = false;
       };
     }
-  }, [sessionId]);
+  }, [session_Id]);
 
-  useEffect(() =>{
-    
-  })
+
 
   // when redirect url is set
 
-
-
-  useEffect(() => {
-    if (redirectUrl) {
-      window.location.href = redirectUrl;
-    }
-  }, [redirectUrl]);
+  // useEffect(() => {
+  //   if (redirectUrl) {
+  //     window.location.href = redirectUrl;
+  //   }
+  // }, [redirectUrl]);
 
   const handleOpen = () => {
-    if (sessionId) {
+    if (session_Id) {
       Synaps.show();
     }
   };
 
   return (
+    
     <div className="App">
-      <button onClick={handleOpen}>Start verification</button>
+      {session_Id?
+      (<button onClick={handleOpen}>Start verification</button>):
+      <p>Loading session id...</p>
+      }
     </div>
   );
 };
