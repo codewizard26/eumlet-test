@@ -8,6 +8,7 @@ const Modal = ({sessionId,redirectUrl,nonce}) => {
   const session_Id = sessionId
 
 console.log("session id recieved in modal ", sessionId)
+console.log("redirecturl", redirectUrl)
 
 
   // Synapse Modal
@@ -40,13 +41,16 @@ console.log("session id recieved in modal ", sessionId)
               // setSessionDetails(data); // Set session details in state
 
               const redirectStatus = data?.session?.status || "UNKNOWN";
-              if (redirectStatus === "PENDING_VERIFICATION" || redirectStatus === "VERIFIED"){
+              console.log(redirectStatus,"adf")
+
+              if (redirectStatus === "PENDING_VERIFICATION" || redirectStatus === "VERIFIED" || redirectStatus === "APPROVED"){
                 alert("Verification finished");
                 setRedirect_Url(redirectUrl)
+                console.log("asdfasdf",redirect_Url)
 
               }
               else{
-                setRedirect_Url()
+                setRedirect_Url("")
               }
               
             })
@@ -68,11 +72,11 @@ console.log("session id recieved in modal ", sessionId)
 
   // when redirect url is set
 
-  // useEffect(() => {
-  //   if (redirectUrl) {
-  //     window.location.href = redirectUrl;
-  //   }
-  // }, [redirectUrl]);
+  useEffect(() => {
+    if (redirect_Url) {
+      window.location.href = redirect_Url;
+    }
+  }, [redirect_Url]);
 
   const handleOpen = () => {
     if (session_Id) {
