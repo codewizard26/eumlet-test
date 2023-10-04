@@ -46,10 +46,12 @@ console.log("redirecturl", redirectUrl)
               if (redirectStatus === "PENDING_VERIFICATION" || redirectStatus === "VERIFIED" || redirectStatus === "APPROVED"){
                 alert("Verification finished");
                 setRedirect_Url(redirectUrl)
-                console.log("asdfasdf",redirect_Url)
+                // console.log("asdfasdf",redirect_Url)
 
               }
               else{
+                alert("Kyc failed, Do you want to retry again?")
+                window.location.reload()
                 setRedirect_Url("")
               }
               
